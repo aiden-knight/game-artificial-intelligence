@@ -20,6 +20,7 @@ public static class Maths
 
     public static float Dot(Vector2 lhs, Vector2 rhs)
     {
+        // may need to normalise
         return (lhs.x * rhs.x) + (lhs.y * rhs.y);
     }
 

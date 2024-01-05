@@ -11,7 +11,11 @@ public static class Maths
 
     public static Vector2 Normalise(Vector2 a)
     {
-        return a / Magnitude(a);
+        float mag = Magnitude(a);
+        if (mag > 0)
+            return a / Magnitude(a);
+        else
+            return Vector2.zero;
     }
 
     public static float Dot(Vector2 lhs, Vector2 rhs)
@@ -24,7 +28,11 @@ public static class Maths
     /// </summary>
     public static float Angle(Vector2 lhs, Vector2 rhs)
     {
-        return Mathf.Acos(Dot(lhs, rhs) / (Magnitude(lhs) * Magnitude(rhs)));
+        float compoundMag = (Magnitude(lhs) * Magnitude(rhs));
+        if (compoundMag > 0)
+            return Mathf.Acos(Dot(lhs, rhs) / compoundMag);
+        else
+            return 0.0f;
     }
 
     /// <summary>

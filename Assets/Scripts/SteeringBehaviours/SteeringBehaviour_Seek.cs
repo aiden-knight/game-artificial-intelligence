@@ -16,8 +16,8 @@ public class SteeringBehaviour_Seek : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
-        //delete me
-        return Vector2.zero;
+        Vector2 dir = Maths.Normalise(m_TargetPosition - (Vector2) (transform.position));
+        return m_Weight * dir;
     }
 
     protected override void OnDrawGizmosSelected()

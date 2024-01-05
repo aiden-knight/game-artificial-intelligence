@@ -10,7 +10,9 @@ public class SteeringBehaviour_Pursuit : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
-        //delete me
-        return Vector2.zero;
+        Vector2 dir = Maths.Normalise(m_PursuingEntity.transform.position - transform.position);
+        m_DesiredVelocity = dir * m_Manager.m_Entity.m_MaxSpeed;
+
+        return m_Weight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
     }
 }

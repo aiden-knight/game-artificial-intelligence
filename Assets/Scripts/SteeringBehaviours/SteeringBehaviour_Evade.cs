@@ -17,6 +17,8 @@ public class SteeringBehaviour_Evade : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
+        if (m_EvadingEntity == null) return Vector2.zero;
+
         Vector2 betweenVector = m_EvadingEntity.transform.position - m_Manager.m_Entity.transform.position;
         if (Maths.Magnitude(betweenVector) > m_EvadeRadius) return Vector2.zero;
 

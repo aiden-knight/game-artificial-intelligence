@@ -17,6 +17,8 @@ public class SteeringBehaviour_Flee : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
+        if(m_FleeTarget == null) return Vector2.zero;
+
         Vector2 betweenVector = m_Manager.m_Entity.transform.position - m_FleeTarget.position;
         float magnitude = Maths.Magnitude(betweenVector);
 
@@ -25,7 +27,8 @@ public class SteeringBehaviour_Flee : SteeringBehaviour
             Vector2 negativeDir = Maths.Normalise(betweenVector);
             m_DesiredVelocity = negativeDir * m_Manager.m_Entity.m_MaxSpeed;
 
-            return m_Weight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
+            float newWeight = Mathf.Lerp(m_Weight, 0, magnitude / m_FleeRadius);
+            return newWeight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
         }
         else
         {

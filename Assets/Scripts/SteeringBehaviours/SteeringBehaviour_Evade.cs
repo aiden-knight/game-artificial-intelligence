@@ -20,7 +20,7 @@ public class SteeringBehaviour_Evade : SteeringBehaviour
         if (m_EvadingEntity == null) return Vector2.zero;
 
         Vector2 betweenVector = m_EvadingEntity.transform.position - m_Manager.m_Entity.transform.position;
-        if (Maths.Magnitude(betweenVector) > m_EvadeRadius) return Vector2.zero;
+        if (Maths.Magnitude(betweenVector) > m_EvadeRadius) return Vector2.zero; // if out of evasion radius do nothing
 
         float opponentSpeed = Maths.Magnitude(m_EvadingEntity.m_Velocity);
         Vector2 fleePos;
@@ -38,7 +38,8 @@ public class SteeringBehaviour_Evade : SteeringBehaviour
         Vector2 negativeDir = (Vector2)m_Manager.m_Entity.transform.position - fleePos;
         m_DesiredVelocity = negativeDir * m_Manager.m_Entity.m_MaxSpeed;
 
-        return m_Weight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
+        float newWeight = Mathf.Lerp(m_Weight, 0, Maths.Magnitude(negativeDir) / m_EvadeRadius);
+        return newWeight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
     }
 
     protected override void OnDrawGizmosSelected()

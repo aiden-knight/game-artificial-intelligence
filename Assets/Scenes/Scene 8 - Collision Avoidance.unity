@@ -3429,7 +3429,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
+  m_Weight: 40
   m_Debug_ShowDebugLines: 1
   m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
   m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
@@ -3982,7 +3982,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
+  m_Weight: 40
   m_Debug_ShowDebugLines: 1
   m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
   m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
@@ -4173,6 +4173,7 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  m_GridNodeScale: 0
 --- !u!4 &710873544
 Transform:
   m_ObjectHideFlags: 0
@@ -14020,7 +14021,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
+  m_Weight: 40
   m_Debug_ShowDebugLines: 1
   m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
   m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
@@ -15320,7 +15321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
+  m_Weight: 40
   m_Debug_ShowDebugLines: 1
   m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
   m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
@@ -15584,7 +15585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
+  m_Weight: 40
   m_Debug_ShowDebugLines: 1
   m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
   m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
@@ -15902,7 +15903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
+  m_Weight: 40
   m_Debug_ShowDebugLines: 1
   m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
   m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}

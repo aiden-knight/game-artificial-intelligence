@@ -27,29 +27,34 @@ public class SteeringBehaviour_Wander : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
-        Vector2 direction = m_PointOnCircle - (Vector2)transform.position;
-        if(Maths.Magnitude(direction) == 0.0f)
+        // get direction based off of velocity
+        Vector2 direction;
+        if(Maths.Magnitude(m_Manager.m_Entity.m_Velocity) > 0.0f)
         {
-            direction = Vector2.up;
+            direction = Maths.Normalise(m_Manager.m_Entity.m_Velocity);
         }
         else
         {
-            direction = Maths.Normalise(direction);
+            direction = Vector2.up;
         }
 
-        m_CirclePosition = (direction * m_WanderOffset);
+        // place circle in front
+        m_CirclePosition = (Vector2) transform.position + (direction * m_WanderOffset);
+
+        // generate new angle
         float rads = Mathf.Deg2Rad * m_AngleDisplacement;
         m_Angle += Random.Range(-rads, rads);
 
+        // calculate point on circle
         float sinAngle = Mathf.Sin(m_Angle);
         float cosAngle = Mathf.Cos(m_Angle);
-        m_PointOnCircle = new Vector2(cosAngle - sinAngle, sinAngle + cosAngle);
-        m_PointOnCircle = Maths.Normalise(m_PointOnCircle)* m_WanderRadius;
+        m_PointOnCircle = new Vector2(cosAngle - sinAngle, sinAngle + cosAngle); 
+        m_PointOnCircle = Maths.Normalise(m_PointOnCircle) * m_WanderRadius;
         m_PointOnCircle += m_CirclePosition;
 
+        // seek towards point on circle
         Vector2 dir = Maths.Normalise(m_PointOnCircle - (Vector2)(transform.position));
         m_DesiredVelocity = dir * m_Manager.m_Entity.m_MaxSpeed;
-
         return m_Weight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
     }
 

@@ -19,11 +19,30 @@ public class SteeringBehaviour_Manager : MonoBehaviour
 
 	public Vector2 GenerateSteeringForce()
     {
-        //delete me
-        if (m_SteeringBehaviours[0] != null)
-            return m_SteeringBehaviours[0].CalculateForce();
-        else
-            return Vector2.zero;
+        m_RemainingForce = m_MaxForce;
+
+        Vector2 total = Vector2.zero;
+        foreach(SteeringBehaviour behaviour in m_SteeringBehaviours)
+        {
+            if (behaviour == null || !behaviour.m_Active) continue;
+
+            Vector2 force = behaviour.CalculateForce();
+            float amount = Maths.Magnitude(force);
+
+            if(amount > m_RemainingForce)
+            {
+                force = Maths.Normalise(force) * m_RemainingForce;
+                total += force;
+                m_RemainingForce = 0.0f;
+                break;
+            }
+            else
+            {
+                m_RemainingForce -= amount;
+                total += force;
+            }
+        }
+        return total;
     }
 
     public void EnableExclusive(SteeringBehaviour behaviour)

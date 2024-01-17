@@ -47313,8 +47313,5 @@ MonoBehaviour:
   m_RotatesBasedOnVelocity: 0
   m_FlipsBasedOnVelocity: 0
   m_Dijkstra:
-    m_AllowDiagonal: 0
-    m_CanCutCorners: 0
-    m_MaxPathCount: 10000
     m_Debug_ChangeTileColours: 1
   m_Debug_DrawPath: 1

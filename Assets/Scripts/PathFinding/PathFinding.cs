@@ -8,9 +8,9 @@ public abstract class PathFinding
 
     [Header("Settings")]
 	[Tooltip("Sets whether the agent can move diagonally, can only be set in the editor during runtime")]
-	protected bool m_AllowDiagonal;
+	public bool m_AllowDiagonal;
 	[Tooltip("Sets whether the agent can cut corners when moving diagonally, can only be set in the editor during runtime")]
-	protected bool m_CanCutCorners;
+    public bool m_CanCutCorners;
 
     /// <summary>
     /// Caps the max iteration count when calculating paths. Useful to stop infinate loops

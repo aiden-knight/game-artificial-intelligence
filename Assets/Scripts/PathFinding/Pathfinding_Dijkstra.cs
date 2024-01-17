@@ -67,51 +67,42 @@ public class Pathfinding_Dijkstra : PathFinding
 			//check all 8 neighbours of the current tile. 0 = up and then goes clockwise.
 			for (int i = 0; i < 8; ++i)
 			{
-				GridNode neighbour = current.node.Neighbours[i];
-				if (neighbour == null || !neighbour.m_Walkable) continue;
+				if (!m_AllowDiagonal && i % 2 != 0) continue;
 
-				// if already visited
-				bool cont = false;
-				foreach(NodeInformation nodeInfo in visited)
+				GridNode neighbour = current.node.Neighbours[i];
+				if (neighbour == null || !neighbour.m_Walkable || DoesListContainNode(visited, neighbour)) continue;
+
+				if(!m_CanCutCorners && i % 2 != 0)
 				{
-					if(nodeInfo.node == neighbour) cont = true;
+					int indexLeft = (i + 7) % 8;
+					int indexRight = (i + 1) % 8;
+
+					if (!current.node.Neighbours[indexLeft].m_Walkable) continue;
+					if (!current.node.Neighbours[indexRight].m_Walkable) continue;
 				}
-				if (cont) continue;
 
 				float cost = current.cost + neighbour.m_Cost + Maths.Magnitude(neighbour.transform.position - current.node.transform.position);
-				foreach(NodeInformation nodeInfo in notVisited)
-				{
-                    if (nodeInfo.node == neighbour)
-					{
-						cont = true;
-						if(nodeInfo.cost > cost)
-						{
-							nodeInfo.UpdateNodeInformation(current, cost);
-						}
-					}
-                }
 
-				if(cont) continue;
-				NodeInformation neighbourInfo = new NodeInformation(neighbour, current, cost);
-				notVisited.Add(neighbourInfo);
+				if(DoesListContainNode(notVisited, neighbour))
+				{
+					NodeInformation neighbourInfo = GetNodeInformationFromList(notVisited, neighbour);
+                    if (neighbourInfo.cost > cost)
+                    {
+                        neighbourInfo.UpdateNodeInformation(current, cost);
+                    }
+                }
+				else
+				{
+                    NodeInformation neighbourInfo = new NodeInformation(neighbour, current, cost);
+                    notVisited.Add(neighbourInfo);
+                }
 			}
 
             notVisited.Remove(current);
 			visited.Add(current);
             if (notVisited.Count > 0)
 			{
-				int cheapestIndex = -1;
-				float cheapestCost = float.MaxValue;
-				for(int i = 0; i < notVisited.Count; i++)
-				{
-					if (notVisited[i].cost < cheapestCost)
-					{
-						cheapestCost = notVisited[i].cost;
-						cheapestIndex = i;
-					}
-				}
-
-				current = notVisited[cheapestIndex];
+				current = GetCheapestNode(notVisited);
 			}
 			else
 			{

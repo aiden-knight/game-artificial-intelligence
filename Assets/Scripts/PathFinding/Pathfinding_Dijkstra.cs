@@ -59,18 +59,59 @@ public class Pathfinding_Dijkstra : PathFinding
 			if (current.node == end)
 			{
 				Debug.Log("Path found, start pos = " + start.transform.position + " - end pos = " + end.transform.position);
+				SetPath(current);
+				DrawPath(visited, notVisited);
 				return;
 			}
 
 			//check all 8 neighbours of the current tile. 0 = up and then goes clockwise.
 			for (int i = 0; i < 8; ++i)
 			{
+				GridNode neighbour = current.node.Neighbours[i];
+				if (neighbour == null || !neighbour.m_Walkable) continue;
 
+				// if already visited
+				bool cont = false;
+				foreach(NodeInformation nodeInfo in visited)
+				{
+					if(nodeInfo.node == neighbour) cont = true;
+				}
+				if (cont) continue;
+
+				float cost = current.cost + neighbour.m_Cost + Maths.Magnitude(neighbour.transform.position - current.node.transform.position);
+				foreach(NodeInformation nodeInfo in notVisited)
+				{
+                    if (nodeInfo.node == neighbour)
+					{
+						cont = true;
+						if(nodeInfo.cost > cost)
+						{
+							nodeInfo.UpdateNodeInformation(current, cost);
+						}
+					}
+                }
+
+				if(cont) continue;
+				NodeInformation neighbourInfo = new NodeInformation(neighbour, current, cost);
+				notVisited.Add(neighbourInfo);
 			}
 
-
-			if (notVisited.Count > 0)
+            notVisited.Remove(current);
+			visited.Add(current);
+            if (notVisited.Count > 0)
 			{
+				int cheapestIndex = -1;
+				float cheapestCost = float.MaxValue;
+				for(int i = 0; i < notVisited.Count; i++)
+				{
+					if (notVisited[i].cost < cheapestCost)
+					{
+						cheapestCost = notVisited[i].cost;
+						cheapestIndex = i;
+					}
+				}
+
+				current = notVisited[cheapestIndex];
 			}
 			else
 			{
@@ -86,7 +127,13 @@ public class Pathfinding_Dijkstra : PathFinding
 	/// </summary>
 	private void SetPath(NodeInformation end)
 	{
-		//set "m_Path" to contain all vector2s on the path
+		NodeInformation curNode = end;
+		while(curNode.parent != null)
+		{
+            m_Path.Add(curNode.node.transform.position);
+			curNode = curNode.parent;
+        }
+		m_Path.Reverse();
 	}
 
 	/// <summary>

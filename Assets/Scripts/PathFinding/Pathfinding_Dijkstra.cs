@@ -119,7 +119,7 @@ public class Pathfinding_Dijkstra : PathFinding
 	private void SetPath(NodeInformation end)
 	{
 		NodeInformation curNode = end;
-		while(curNode.parent != null)
+		while(curNode != null)
 		{
             m_Path.Add(curNode.node.transform.position);
 			curNode = curNode.parent;

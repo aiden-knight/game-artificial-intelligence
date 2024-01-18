@@ -74,25 +74,32 @@ public abstract class PathFinding
 
     protected float Heuristic_Manhattan(GridNode start, GridNode end)
     {
-        //delete me
-        return 0.0f;
+        float xDiff = Mathf.Abs(end.transform.position.x - start.transform.position.x);
+        float yDiff = Mathf.Abs(end.transform.position.y - start.transform.position.y);
+        
+        return xDiff + yDiff;
     }
 
     protected float Heuristic_Euclidean(GridNode start, GridNode end)
     {
-        //delete me
-        return 0.0f;
+        Vector2 diff = end.transform.position - start.transform.position;
+
+        return Maths.Magnitude(diff);
     }
 
     protected float Heuristic_Octile(GridNode start, GridNode end)
     {
-		//delete me
-		return 0.0f;
+        float xDiff = Mathf.Abs(end.transform.position.x - start.transform.position.x);
+        float yDiff = Mathf.Abs(end.transform.position.y - start.transform.position.y);
+
+        return Mathf.Max(xDiff, yDiff) + (0.41f * Mathf.Min(xDiff, yDiff));
 	}
 
     public float Heuristic_Chebyshev(GridNode start, GridNode end)
     {
-		//delete me
-		return 0.0f;
-	}
+        float xDiff = Mathf.Abs(end.transform.position.x - start.transform.position.x);
+        float yDiff = Mathf.Abs(end.transform.position.y - start.transform.position.y);
+
+        return Mathf.Max(xDiff, yDiff);
+    }
 }

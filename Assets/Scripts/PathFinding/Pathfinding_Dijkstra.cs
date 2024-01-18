@@ -67,11 +67,13 @@ public class Pathfinding_Dijkstra : PathFinding
 			//check all 8 neighbours of the current tile. 0 = up and then goes clockwise.
 			for (int i = 0; i < 8; ++i)
 			{
+				// ignore diagonals if not allowing them
 				if (!m_AllowDiagonal && i % 2 != 0) continue;
 
 				GridNode neighbour = current.node.Neighbours[i];
 				if (neighbour == null || !neighbour.m_Walkable || DoesListContainNode(visited, neighbour)) continue;
 
+				// disallows cutting corners
 				if(!m_CanCutCorners && i % 2 != 0)
 				{
 					int indexLeft = (i + 7) % 8;

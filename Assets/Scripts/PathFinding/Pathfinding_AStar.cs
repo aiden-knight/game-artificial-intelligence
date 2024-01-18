@@ -34,6 +34,18 @@ public class Pathfinding_AStar : PathFinding
 
     public Pathfinding_AStar(bool allowDiagonal, bool cutCorners) : base(allowDiagonal, cutCorners) { }
 
+	float Heuristic_Caller(GridNode start, GridNode end, bool allowDiagonal)
+	{
+		if(allowDiagonal)
+		{
+			return Heuristic_Octile(start, end);
+		}
+        else
+        {
+            return Heuristic_Manhattan(start, end);
+        }
+    }
+
     public override void GeneratePath(GridNode start, GridNode end)
     {
 		//clears the current path
@@ -43,8 +55,10 @@ public class Pathfinding_AStar : PathFinding
         List<NodeInformation> openList = new List<NodeInformation>();
 		List<NodeInformation> closedList = new List<NodeInformation>();
 
-		//replace with start
-        NodeInformation current = new NodeInformation(null, null, 0,0);
+        NodeInformation startingNode = new NodeInformation(start, null, 0, Heuristic_Caller(start, end, m_AllowDiagonal));
+		openList.Add(startingNode);
+
+		NodeInformation current = startingNode;
 
 		int maxIternation = 0;
 
@@ -62,16 +76,56 @@ public class Pathfinding_AStar : PathFinding
 			if (current.node == end)
 			{
 				Debug.Log("Path found, start pos = " + start.transform.position + " - end pos = " + end.transform.position);
+				SetPath(current);
+				DrawPath(openList, closedList);
 				return;
 			}
 
 			for (int i = 0; i < 8; ++i)
             {
+                // ignore diagonals if not allowing them
+                if (!m_AllowDiagonal && i % 2 != 0) continue;
+
+                GridNode neighbour = current.node.Neighbours[i];
+                if (neighbour == null || !neighbour.m_Walkable || DoesListContainNode(closedList, neighbour)) continue;
+
+                // disallows cutting corners
+                if (!m_CanCutCorners && i % 2 != 0)
+                {
+                    int indexLeft = (i + 7) % 8;
+                    int indexRight = (i + 1) % 8;
+
+                    if (!current.node.Neighbours[indexLeft].m_Walkable) continue;
+                    if (!current.node.Neighbours[indexRight].m_Walkable) continue;
+                }
+
+				//float gCost = current.gCost + neighbour.m_Cost + Maths.Magnitude(neighbour.transform.position - current.node.transform.position);
+				// commented out as neighbour.m_Cost overbears the heuristic calculation causing A* to perform similarly to dijkstra
+				// as gCost has greater bearing over hCost the further the pathfinding travels, due to the extra addition each tile travelled
+				// so if start is 10 movements ago, gCost contains 10*neighbour.m_cost values
+				float gCost = current.gCost + Maths.Magnitude(neighbour.transform.position - current.node.transform.position);
+				float hCost = Heuristic_Caller(neighbour, end, m_AllowDiagonal);
+
+                if (DoesListContainNode(openList, neighbour))
+                {
+                    NodeInformation neighbourInfo = GetNodeInformationFromList(openList, neighbour);
+                    if (neighbourInfo.fCost > (gCost + hCost))
+                    {
+                        neighbourInfo.UpdateNodeInformation(current, gCost, hCost);
+                    }
+                }
+                else
+                {
+                    NodeInformation neighbourInfo = new NodeInformation(neighbour, current, gCost, hCost);
+                    openList.Add(neighbourInfo);
+                }
             }
 
-
+			openList.Remove(current);
+			closedList.Add(current);
             if (openList.Count > 0)
             {
+				current = GetCheapestNode(openList);
 			}
 			else
             {
@@ -87,7 +141,14 @@ public class Pathfinding_AStar : PathFinding
 	/// </summary>
 	private void SetPath(NodeInformation end)
 	{
-	}
+        NodeInformation curNode = end;
+        while (curNode != null)
+        {
+            m_Path.Add(curNode.node.transform.position);
+            curNode = curNode.parent;
+        }
+        m_Path.Reverse();
+    }
 
 	/// <summary>
 	/// Returns the cheapest node in the list calculated by cost

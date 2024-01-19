@@ -31,6 +31,8 @@ public class SteeringBehaviour_Cohesion : SteeringBehaviour
         Vector2 accumulatedPos = Vector2.zero;
         foreach (Collider2D col in entities)
         {
+            if (this.gameObject == col.gameObject) continue;
+
             Vector2 toEntity = col.transform.position - transform.position;
             float dist = Maths.Magnitude(toEntity);
             float dotProduct = Maths.Dot(direction, toEntity);

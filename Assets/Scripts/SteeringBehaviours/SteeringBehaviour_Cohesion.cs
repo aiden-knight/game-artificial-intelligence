@@ -27,8 +27,8 @@ public class SteeringBehaviour_Cohesion : SteeringBehaviour
             direction = Vector2.up;
         }
 
-        int agentNum = 0;
-        Vector2 accumulatedPos = Vector2.zero;
+        int agentNum = 1;
+        Vector2 accumulatedPos = (Vector2) transform.position;
         foreach (Collider2D col in entities)
         {
             if (this.gameObject == col.gameObject) continue;
@@ -45,7 +45,7 @@ public class SteeringBehaviour_Cohesion : SteeringBehaviour
             agentNum++;
         }
 
-        if(agentNum == 0) return Vector2.zero;
+        if(agentNum == 1) return Vector2.zero;
 
         Vector2 cohesionPos = accumulatedPos / agentNum;
         Vector2 dir = Maths.Normalise(cohesionPos - (Vector2)(transform.position));

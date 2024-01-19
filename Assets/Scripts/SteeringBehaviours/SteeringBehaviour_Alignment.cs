@@ -45,7 +45,7 @@ public class SteeringBehaviour_Alignment : SteeringBehaviour
             Vector2 entityVelocity = col.GetComponent<MovingEntity>().m_Velocity;
             if(entityVelocity == Vector2.zero)
             {
-                entityVelocity = col.transform.up;
+                continue;
             }
             accumulatedHeading += Maths.Normalise(entityVelocity);
             agentNum++;

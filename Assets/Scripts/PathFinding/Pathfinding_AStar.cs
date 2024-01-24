@@ -42,7 +42,7 @@ public class Pathfinding_AStar : PathFinding
 		}
         else
         {
-            return Heuristic_Manhattan(start, end);
+            return Heuristic_Chebyshev(start, end);
         }
     }
 

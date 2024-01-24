@@ -26,7 +26,7 @@ public class SteeringBehaviour_Pursuit : SteeringBehaviour
             chasePos = m_PursuingEntity.transform.position;
         }
 
-        Vector2 dir = chasePos - (Vector2)transform.position;
+        Vector2 dir = Maths.Normalise(chasePos - (Vector2)transform.position);
         m_DesiredVelocity = dir * m_Manager.m_Entity.m_MaxSpeed;
 
         return m_Weight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);

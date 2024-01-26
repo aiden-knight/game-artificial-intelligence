@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.Loading;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.XR;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [System.Serializable]
@@ -71,6 +72,30 @@ public class Pathfinding_JSP : PathFinding
         }
     }
 
+	bool CheckForcedNeighbour(GridNode node, int direction, bool clockwise, bool diagonal)
+	{
+		int dirMod;
+		int dirModSide;
+        if (diagonal)
+        {
+			dirMod = 3;
+			dirModSide = 2;
+        }
+        else
+        {
+			dirMod = 2;
+			dirModSide = 1;
+        }
+
+		if(clockwise)
+		{
+			dirMod = 8 - dirMod;
+			dirModSide = 8 - dirModSide;
+		}
+
+		return (!GetNeighbourInDirection(node, (direction + dirMod) % 8).m_Walkable && GetNeighbourInDirection(node, (direction + dirModSide) % 8).m_Walkable);
+    }
+
 	void DiagonalJump(NodeInformation current, GridNode end, List<NodeInformation> openList, int direction)
 	{
         GridNode jumpNode = GetNeighbourInDirection(current.node, direction);
@@ -83,17 +108,31 @@ public class Pathfinding_JSP : PathFinding
                 break;
             }
 
+            if (CheckForcedNeighbour(jumpNode, direction, true, true))
+            {
+                AddNode(current, jumpNode, end, openList, direction);
+                break;
+            }
+
+            if (CheckForcedNeighbour(jumpNode, direction, false, true))
+            {
+                AddNode(current, jumpNode, end, openList, direction);
+                break;
+            }
+
             int orthogDir = (direction + 7) % 8;
-            OrthogonalJump(current, end, openList, orthogDir, jumpNode, direction);
+			if (OrthogonalJump(current, end, openList, orthogDir, jumpNode, direction))
+				break;
 
             orthogDir = (direction + 1) % 8;
-            OrthogonalJump(current, end, openList, orthogDir, jumpNode, direction);
+			if (OrthogonalJump(current, end, openList, orthogDir, jumpNode, direction))
+				break;
 
             jumpNode = GetNeighbourInDirection(jumpNode, direction);
         }
     }
 
-    void OrthogonalJump(NodeInformation current, GridNode end, List<NodeInformation> openList, int direction, GridNode diagonal = null, int diagonalDirection = -1)
+    bool OrthogonalJump(NodeInformation current, GridNode end, List<NodeInformation> openList, int direction, GridNode diagonal = null, int diagonalDirection = -1)
 	{
 		GridNode jumpNode;
         if (diagonal != null)
@@ -115,17 +154,13 @@ public class Pathfinding_JSP : PathFinding
 				break;
 			}
 
-            int above = (direction + 6) % 8;
-            int left = (direction + 7) % 8;
-            if (!GetNeighbourInDirection(jumpNode, above).m_Walkable && GetNeighbourInDirection(jumpNode, left).m_Walkable)
+			if (CheckForcedNeighbour(jumpNode, direction, true, false))
             {
 				addNode = true;
                 break;
             }
 
-            int below = (direction + 2) % 8;
-            int right = (direction + 1) % 8;
-            if (!GetNeighbourInDirection(jumpNode, below).m_Walkable && GetNeighbourInDirection(jumpNode, right).m_Walkable)
+            if (CheckForcedNeighbour(jumpNode, direction, false, false))
             {
                 addNode = true;
                 break;
@@ -144,6 +179,7 @@ public class Pathfinding_JSP : PathFinding
                 AddNode(current, jumpNode, end, openList, direction);
             }
 		}
+		return addNode;
     }
 
     public override void GeneratePath(GridNode start, GridNode end)

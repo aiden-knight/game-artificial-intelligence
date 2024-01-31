@@ -35,7 +35,7 @@ public class SteeringBehaviour_Evade : SteeringBehaviour
             fleePos = m_EvadingEntity.transform.position;
         }
 
-        Vector2 negativeDir = (Vector2)m_Manager.m_Entity.transform.position - fleePos;
+        Vector2 negativeDir = Maths.Normalise((Vector2)m_Manager.m_Entity.transform.position - fleePos);
         m_DesiredVelocity = negativeDir * m_Manager.m_Entity.m_MaxSpeed;
 
         float newWeight = Mathf.Lerp(m_Weight, 0, Maths.Magnitude(negativeDir) / m_EvadeRadius);

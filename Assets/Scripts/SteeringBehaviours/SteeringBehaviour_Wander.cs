@@ -10,7 +10,7 @@ public class SteeringBehaviour_Wander : SteeringBehaviour
     [Header("Settings")]
     public float m_WanderRadius = 2; 
     public float m_WanderOffset = 2;
-    public float m_AngleDisplacement = 2;
+    public float m_AngleDisplacement = 20;
 
     Vector2 m_CirclePosition;
     Vector2 m_PointOnCircle;

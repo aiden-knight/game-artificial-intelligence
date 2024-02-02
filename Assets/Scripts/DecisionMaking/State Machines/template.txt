@@ -1,0 +1,25 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class State : FuzzyState
+{
+    public override void Run()
+    {
+
+    }
+
+    public override void Enter()
+    {
+        
+    }
+    public override void Exit()
+    {
+
+    }
+
+    public override float CalculateActivation()
+    {
+        return m_ActivationDegree;
+    }
+}

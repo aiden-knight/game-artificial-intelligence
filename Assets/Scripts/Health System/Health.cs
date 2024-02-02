@@ -12,6 +12,8 @@ public class Health : MonoBehaviour
     int m_MaxHealth;
     int m_CurrentHealth;
 
+    public float HealthRatio => (float)m_CurrentHealth / m_MaxHealth;
+
     public void Start()
     {
         m_CurrentHealth = m_MaxHealth;

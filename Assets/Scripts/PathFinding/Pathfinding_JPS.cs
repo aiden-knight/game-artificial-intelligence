@@ -7,7 +7,7 @@ using UnityEngine.XR;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [System.Serializable]
-public class Pathfinding_JSP : PathFinding
+public class Pathfinding_JPS : PathFinding
 {
 	[System.Serializable]
 	class NodeInformation
@@ -38,7 +38,7 @@ public class Pathfinding_JSP : PathFinding
 		}
 	}
 
-	public Pathfinding_JSP(bool allowDiagonal, bool cutCorners) : base(allowDiagonal, cutCorners) { }
+	public Pathfinding_JPS(bool allowDiagonal, bool cutCorners) : base(allowDiagonal, cutCorners) { }
 
     float Heuristic_Caller(GridNode start, GridNode end)
     {

@@ -68,4 +68,15 @@ public class SteeringBehaviour_Manager : MonoBehaviour
             sb.m_Active = false;
         }
     }
+
+    // @TODO update to handle possible priority?
+    public void AddBehaviour(SteeringBehaviour behaviour)
+    {
+        m_SteeringBehaviours.Add(behaviour);
+    }
+
+    public void RemoveBehaviour(SteeringBehaviour behaviour)
+    {
+        m_SteeringBehaviours.Remove(behaviour);
+    }
 }

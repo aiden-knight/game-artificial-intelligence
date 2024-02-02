@@ -16751,7 +16751,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -141.59131, y: -93.46431}
+  m_AnchoredPosition: {x: -141.59131, y: 0}
   m_SizeDelta: {x: 95.3902, y: 41.9286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &657188371
@@ -16797,26 +16797,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
   m_PrefabInstance: {fileID: 789838360}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &667837475
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 667837474}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d7dd8f3a5e8cfc4d92d2904d71f13e5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  m_Weight: 20
-  m_Debug_ShowDebugLines: 1
-  m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
-  m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
-  m_Debug_SteeringColour: {r: 1, g: 0, b: 0, a: 1}
-  m_TargetPosition: {x: 0, y: 0}
-  m_Debug_TargetColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!114 &667837476
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16831,11 +16811,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_MaxForce: 100
   m_RemainingForce: 0
-  m_SteeringBehaviours:
-  - {fileID: 667837475}
-  - {fileID: 667837482}
-  - {fileID: 667837483}
---- !u!114 &667837482
+  m_SteeringBehaviours: []
+--- !u!114 &667837484
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16844,19 +16821,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 667837474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6eecb2dad6e38e94e8731bd1a60c7cb2, type: 3}
+  m_Script: {fileID: 11500000, guid: 6edb7c0a5723885438aacd58874d5442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Active: 1
-  m_Weight: 20
-  m_Debug_ShowDebugLines: 1
-  m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
-  m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
-  m_Debug_SteeringColour: {r: 1, g: 0, b: 0, a: 1}
-  m_FleeTarget: {fileID: 0}
-  m_FleeRadius: 5
-  m_Debug_RadiusColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
---- !u!114 &667837483
+  m_States:
+  - {fileID: 667837490}
+--- !u!114 &667837490
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -16865,20 +16835,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 667837474}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96a06f954055d8b499fa882ce2098a9f, type: 3}
+  m_Script: {fileID: 11500000, guid: f56b3951fb45d974aaffec060bf8cffd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Active: 1
-  m_Weight: 20
-  m_Debug_ShowDebugLines: 1
-  m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
-  m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
-  m_Debug_SteeringColour: {r: 1, g: 0, b: 0, a: 1}
-  m_WanderRadius: 2
-  m_WanderOffset: 2
-  m_AngleDisplacement: 20
-  m_Debug_RadiusColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  m_Debug_TargetColour: {r: 0, g: 1, b: 1, a: 1}
+  m_JPS:
+    m_AllowDiagonal: 0
+    m_CanCutCorners: 0
+    m_Debug_ChangeTileColours: 0
 --- !u!1 &676955720
 GameObject:
   m_ObjectHideFlags: 0
@@ -18099,17 +18063,14 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      insertIndex: 4
+      addedObject: {fileID: 667837490}
+    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      insertIndex: 5
+      addedObject: {fileID: 667837484}
+    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
       insertIndex: -1
       addedObject: {fileID: 667837476}
-    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 667837475}
-    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 667837482}
-    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 667837483}
   m_SourcePrefab: {fileID: 100100000, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
 --- !u!1 &790057445
 GameObject:
@@ -61115,7 +61076,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 170, y: -90}
+  m_AnchoredPosition: {x: 170, y: 0}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1912415386

@@ -16826,6 +16826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_States:
   - {fileID: 667837490}
+  - {fileID: 667837491}
 --- !u!114 &667837490
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16843,6 +16844,19 @@ MonoBehaviour:
     m_AllowDiagonal: 0
     m_CanCutCorners: 0
     m_Debug_ChangeTileColours: 0
+--- !u!114 &667837491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667837474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da2050892f669ba43a1daef541f50021, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Active: 1
 --- !u!1 &676955720
 GameObject:
   m_ObjectHideFlags: 0
@@ -18064,9 +18078,12 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
       insertIndex: 4
-      addedObject: {fileID: 667837490}
+      addedObject: {fileID: 667837491}
     - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
       insertIndex: 5
+      addedObject: {fileID: 667837490}
+    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      insertIndex: 6
       addedObject: {fileID: 667837484}
     - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
       insertIndex: -1

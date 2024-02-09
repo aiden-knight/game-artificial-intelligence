@@ -4,11 +4,14 @@ using Unity.Loading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR;
+using System.Threading;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [System.Serializable]
 public class Pathfinding_JPS : PathFinding
 {
+	JPS_Routines routineCaller;
+
 	[System.Serializable]
 	class NodeInformation
 	{
@@ -29,12 +32,13 @@ public class Pathfinding_JPS : PathFinding
 			fCost = gCost + hCost;
 		}
 
-		public void UpdateNodeInformation(NodeInformation parent, float gCost, float hCost)
+		public void UpdateNodeInformation(NodeInformation parent, float gCost, float hCost, int direction)
 		{
 			this.parent = parent;
 			this.gCost = gCost;
 			this.hCost = hCost;
 			fCost = gCost + hCost;
+			this.direction = direction;
 		}
 	}
 
@@ -54,6 +58,7 @@ public class Pathfinding_JPS : PathFinding
 
 	void AddNode(NodeInformation current, GridNode jumpNode, GridNode end, List<NodeInformation> openList, int direction)
 	{
+		// calculates cost to get to node (currently treating all grid nodes as same cost to travel through)
         float gCost = current.gCost + Maths.Magnitude(jumpNode.transform.position - current.node.transform.position);
         float hCost = Heuristic_Caller(jumpNode, end);
 
@@ -62,7 +67,7 @@ public class Pathfinding_JPS : PathFinding
             NodeInformation nodeInfo = GetNodeInformationFromList(openList, jumpNode);
             if (nodeInfo.fCost > (gCost + hCost))
             {
-                nodeInfo.UpdateNodeInformation(current, gCost, hCost);
+                nodeInfo.UpdateNodeInformation(current, gCost, hCost, direction);
             }
         }
         else
@@ -72,27 +77,28 @@ public class Pathfinding_JPS : PathFinding
         }
     }
 
-	bool CheckForcedNeighbour(GridNode node, int direction, bool clockwise, bool diagonal)
+	bool CheckForcedNeighbour(GridNode node, int direction, bool antiClockwise, bool diagonal)
 	{
 		int dirMod;
 		int dirModSide;
-        if (diagonal)
+        if (diagonal) // if diagonal it's left or below (+/- 3 then the one to the side of that which we could reach)
         {
 			dirMod = 3;
 			dirModSide = 2;
         }
-        else
+        else // if not diagonal it's above or below with diagonal up left / down right
         {
 			dirMod = 2;
 			dirModSide = 1;
         }
 
-		if(clockwise)
+		if(antiClockwise) // anti-clockwise check subtracts from direction which in mod 8 is adding 8 minus value
 		{
 			dirMod = 8 - dirMod;
 			dirModSide = 8 - dirModSide;
 		}
 
+		// if non walkable neighbour with walkable neighbour to its side then is a forced neighbour
 		return (!GetNeighbourInDirection(node, (direction + dirMod) % 8).m_Walkable && GetNeighbourInDirection(node, (direction + dirModSide) % 8).m_Walkable);
     }
 
@@ -101,25 +107,31 @@ public class Pathfinding_JPS : PathFinding
         GridNode jumpNode = GetNeighbourInDirection(current.node, direction);
         while (jumpNode != null)
         {
-            if (!jumpNode.m_Walkable) break;
+            if (!jumpNode.m_Walkable) break; // if hit a wall just count direction as pointless
             if (jumpNode == end)
             {
                 AddNode(current, jumpNode, end, openList, direction);
                 break;
             }
 
+            if (m_Debug_ChangeTileColours)
+            {
+                jumpNode.SetJumpedInPathFinding();
+            }
+
+            // check for diagonal forced neighbours, if so add current jump node to open list
             if (CheckForcedNeighbour(jumpNode, direction, true, true))
             {
                 AddNode(current, jumpNode, end, openList, direction);
                 break;
             }
-
             if (CheckForcedNeighbour(jumpNode, direction, false, true))
             {
                 AddNode(current, jumpNode, end, openList, direction);
                 break;
             }
 
+			// also jump out in the orthogonal directions
             int orthogDir = (direction + 7) % 8;
 			if (OrthogonalJump(current, end, openList, orthogDir, jumpNode, direction))
 				break;
@@ -135,7 +147,7 @@ public class Pathfinding_JPS : PathFinding
     bool OrthogonalJump(NodeInformation current, GridNode end, List<NodeInformation> openList, int direction, GridNode diagonal = null, int diagonalDirection = -1)
 	{
 		GridNode jumpNode;
-        if (diagonal != null)
+        if (diagonal != null) // if jumping from diagonal don't use current as start point
         {
             jumpNode = GetNeighbourInDirection(diagonal, direction);
         }
@@ -148,13 +160,18 @@ public class Pathfinding_JPS : PathFinding
         while (jumpNode != null)
         {
             if (!jumpNode.m_Walkable) break;
-			if(jumpNode == end)
+            if (jumpNode == end)
 			{
 				addNode = true;
 				break;
 			}
+            if (m_Debug_ChangeTileColours)
+            {
+                jumpNode.SetJumpedInPathFinding();
+            }
 
-			if (CheckForcedNeighbour(jumpNode, direction, true, false))
+
+            if (CheckForcedNeighbour(jumpNode, direction, true, false))
             {
 				addNode = true;
                 break;
@@ -170,6 +187,7 @@ public class Pathfinding_JPS : PathFinding
 
 		if(addNode)
 		{
+			// if was jumping diagonally add the diagonal jump node as the node of interest to the open list
 			if(diagonal != null)
 			{
                 AddNode(current, diagonal, end, openList, diagonalDirection);
@@ -184,6 +202,12 @@ public class Pathfinding_JPS : PathFinding
 
     public override void GeneratePath(GridNode start, GridNode end)
 	{
+		
+		GeneratePathThread(start, end);
+    }
+
+    public void GeneratePathThread(GridNode start, GridNode end)
+	{
 		//clears the current path
 		m_Path.Clear();
 		
@@ -191,9 +215,11 @@ public class Pathfinding_JPS : PathFinding
 		List<NodeInformation> openList = new List<NodeInformation>();
 		List<NodeInformation> closedList = new List<NodeInformation>();
 
+		// setup starting node
 		NodeInformation startingNode = new NodeInformation(start, null, 0, 0, -1);
         NodeInformation current = startingNode;
 
+		// jump through all 8 directions from start
         for (int i = 0; i < 8; i += 2)
         {
             OrthogonalJump(current, end, openList, i);
@@ -220,6 +246,7 @@ public class Pathfinding_JPS : PathFinding
 		{
 			if (maxIteration > m_MaxPathCount) break;
 
+			// if found end node we are done
 			if(current.node == end)
 			{
 				SetPath(current);
@@ -227,38 +254,53 @@ public class Pathfinding_JPS : PathFinding
 				return;
 			}
 
+			// start by jumping in the direction we were already going when we found the node of interest
 			int direction = current.direction;
 			if(direction % 2 == 0)
 			{
                 OrthogonalJump(current, end, openList, direction);
 
-                int above = (direction + 6) % 8;
-                int left = (direction + 7) % 8;
-                if (!GetNeighbourInDirection(current.node, above).m_Walkable && GetNeighbourInDirection(current.node, left).m_Walkable)
-                {
-                    DiagonalJump(current, end, openList, left);
+				// do diagonal jump in direction of forced neighbours
+				if(CheckForcedNeighbour(current.node, direction, true, false))
+				{
+					int diagDir = (direction + 7) % 8;
+                    DiagonalJump(current, end, openList, diagDir);
                 }
-
-                int below = (direction + 2) % 8;
-                int right = (direction + 1) % 8;
-                if (!GetNeighbourInDirection(current.node, below).m_Walkable && GetNeighbourInDirection(current.node, right).m_Walkable)
+                if (CheckForcedNeighbour(current.node, direction, false, false))
                 {
-                    DiagonalJump(current, end, openList, right);
+                    int diagDir = (direction + 1) % 8;
+                    DiagonalJump(current, end, openList, diagDir);
                 }
             }
 			else
 			{
-                DiagonalJump(current, end, openList, direction);
+				// jumps to left and right side of diagonal direction
                 int left = (direction + 7) % 8;
                 int right = (direction + 1) % 8;
                 OrthogonalJump(current, end, openList, left);
                 OrthogonalJump(current, end, openList, right);
+
+				// jump diagonally in intended direction
+                DiagonalJump(current, end, openList, direction);
+
+                // do diagonal jump in direction of forced neighbours
+                if (CheckForcedNeighbour(current.node, direction, true, true))
+                {
+                    int diagDir = (direction + 6) % 8;
+                    DiagonalJump(current, end, openList, diagDir);
+                }
+                if (CheckForcedNeighbour(current.node, direction, false, true))
+                {
+                    int diagDir = (direction + 2) % 8;
+                    DiagonalJump(current, end, openList, diagDir);
+                }
             }
 
             openList.Remove(current);
             closedList.Add(current);
             if (openList.Count > 0)
             {
+				// get next cheapest node
                 current = GetCheapestNode(openList);
             }
             else

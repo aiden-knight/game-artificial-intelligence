@@ -10,8 +10,6 @@ using static UnityEngine.RuleTile.TilingRuleOutput;
 [System.Serializable]
 public class Pathfinding_JPS : PathFinding
 {
-	JPS_Routines routineCaller;
-
 	[System.Serializable]
 	class NodeInformation
 	{
@@ -202,7 +200,7 @@ public class Pathfinding_JPS : PathFinding
 
     public override void GeneratePath(GridNode start, GridNode end)
 	{
-		
+		if (start == end) return;
 		GeneratePathThread(start, end);
     }
 

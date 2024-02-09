@@ -37,23 +37,23 @@ public abstract class PathFinding
 
     public Vector2 GetClosestPointOnPath(Vector2 position)
     {
-        float distance = float.MaxValue;
-        int closestPoint = int.MaxValue;
+        //float distance = float.MaxValue;
+        //int closestPoint = int.MaxValue;
 
-        for (int i = 0; i < m_Path.Count; ++i)
-        {
-            float tempDistance = Maths.Magnitude(m_Path[i] - position);
-            if (tempDistance < distance)
-            {
-                closestPoint = i;
-                distance = tempDistance;
-            }
-        }
+        //for (int i = 0; i < m_Path.Count; ++i)
+        //{
+        //    float tempDistance = Maths.Magnitude(m_Path[i] - position);
+        //    if (tempDistance < distance)
+        //    {
+        //        closestPoint = i;
+        //        distance = tempDistance;
+        //    }
+        //}
 
-        for (int j = 0; j < closestPoint - 1; ++j)
-        {
-            m_Path.RemoveAt(0);
-        }
+        //for (int j = 0; j < closestPoint - 1; ++j)
+        //{
+        //    m_Path.RemoveAt(0);
+        //}
 
         return m_Path[0];
     }

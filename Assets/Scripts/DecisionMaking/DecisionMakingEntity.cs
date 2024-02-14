@@ -16,7 +16,6 @@ public class DecisionMakingEntity : MovingEntity
     public static Action OnPlayerDead;
 
     SteeringBehaviour_Manager m_SteeringBehaviours;
-    FuzzyStateManager m_StateManager;
 
     protected override void Awake()
     {
@@ -24,8 +23,6 @@ public class DecisionMakingEntity : MovingEntity
 
         m_SteeringBehaviours = GetComponent<SteeringBehaviour_Manager>();
         if (!m_SteeringBehaviours) Debug.LogError("Object doesn't have a Steering Behaviour Manager attached", this);
-        m_StateManager = GetComponent<FuzzyStateManager>();
-        if (!m_StateManager) Debug.LogError("Object doesn't have a State Manager attached", this);
     }
 
     private void Start()
@@ -36,25 +33,7 @@ public class DecisionMakingEntity : MovingEntity
 
     void Update()
     {
-        m_StateManager.CalculateActiveStates();
-        m_StateManager.RunActiveStates();
 
-        if (Input.GetMouseButtonDown(0))
-        {
-            m_current.PullTrigger();
-        }
-        if(Input.GetKeyDown(KeyCode.F1))
-        {
-            EquipWeaponOfType(WeaponType.Handgun);
-        }
-        if (Input.GetKeyDown(KeyCode.F2))
-        {
-            EquipWeaponOfType(WeaponType.Machinegun);
-        }
-        if (Input.GetKeyDown(KeyCode.F3))
-        {
-            EquipWeaponOfType(WeaponType.Shotgun);
-        }
     }
 
     private void EquipWeaponOfType(WeaponType type)

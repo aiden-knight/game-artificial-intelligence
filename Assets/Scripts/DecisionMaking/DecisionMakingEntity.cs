@@ -16,6 +16,12 @@ public class DecisionMakingEntity : MovingEntity
     public static Action OnPlayerDead;
 
     SteeringBehaviour_Manager m_SteeringBehaviours;
+    SteeringBehaviour_Seek m_Seek;
+
+    BehaviourTree m_BTree;
+    string seekBehaviourKey = "SeekBehaviour";
+    string agentPosKey = "AgentPos";
+    Pointer m_PosPointer;
 
     protected override void Awake()
     {
@@ -23,6 +29,21 @@ public class DecisionMakingEntity : MovingEntity
 
         m_SteeringBehaviours = GetComponent<SteeringBehaviour_Manager>();
         if (!m_SteeringBehaviours) Debug.LogError("Object doesn't have a Steering Behaviour Manager attached", this);
+        m_Seek = GetComponent<SteeringBehaviour_Seek>();
+        if (!m_Seek) Debug.LogError("Object doesn't have a Seek Steering Behaviour attached", this);
+
+        m_BTree = new BehaviourTree(
+            new BTSequence(new List<BTNode>()
+                {
+                    new BTHealthPickup(),
+                    new BTSeekTo()
+                })
+            );
+
+
+        m_BTree.m_Blackboard.AddToDictionary(seekBehaviourKey, new Pointer(m_Seek));
+        m_PosPointer = new Pointer((Vector2)transform.position);
+        m_BTree.m_Blackboard.AddToDictionary(agentPosKey, m_PosPointer);
     }
 
     private void Start()
@@ -33,7 +54,8 @@ public class DecisionMakingEntity : MovingEntity
 
     void Update()
     {
-
+        m_PosPointer.Var = (Vector2)transform.position;
+        m_BTree.Process();
     }
 
     private void EquipWeaponOfType(WeaponType type)

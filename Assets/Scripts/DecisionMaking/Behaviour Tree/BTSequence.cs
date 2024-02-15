@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class BTSequence : BTNode
 {
+    public BTSequence(List<BTNode> children) : base(children){}
+
     public override BTState Process()
     {
         BTState ret = m_Children[m_ActiveChild].Process();

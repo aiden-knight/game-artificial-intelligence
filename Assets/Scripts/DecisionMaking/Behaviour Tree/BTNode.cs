@@ -17,26 +17,22 @@ public abstract class BTNode
     protected int m_ActiveChild = 0;
     protected BTBlackboard m_Blackboard;
 
-    public BTNode()
-    {
-
-    }
-
-    public BTNode(BTNode child)
+    protected BTNode() { }
+    protected BTNode(BTNode child)
     {
         m_Children = new List<BTNode>() { child };
     }
-
-    public abstract BTState Process();
-
-    public BTNode(List<BTNode> children)
+    protected BTNode(List<BTNode> children)
     {
         m_Children = children;
     }
+    public abstract BTState Process();
 
-    public void AddBlackBoardRecursive(BTBlackboard blackboard)
+    public virtual void AddBlackBoardRecursive(BTBlackboard blackboard)
     {
         m_Blackboard = blackboard;
+        if (m_Children == null) return;
+
         foreach (BTNode child in m_Children)
         {
             child.AddBlackBoardRecursive(blackboard);

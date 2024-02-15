@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BTInverter : BTNode
 {
+    public BTInverter(BTNode child) : base(child) { }
     public override BTState Process()
     {
         BTState ret = m_Children[m_ActiveChild].Process();

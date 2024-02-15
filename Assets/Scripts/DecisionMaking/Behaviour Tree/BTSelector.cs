@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class BTSelector : BTNode
 {
+    public BTSelector(List<BTNode> children) : base(children) { }
     public override BTState Process()
     {
         BTState ret = m_Children[m_ActiveChild].Process();

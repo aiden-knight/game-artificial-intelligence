@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DecisionMakingEntity : MovingEntity
@@ -8,10 +9,11 @@ public class DecisionMakingEntity : MovingEntity
 
     public float m_Acceleration;
 
+    public float m_AlertRadius = 5.0f;
     public bool m_CanMoveWhileAttacking;
     List<WeaponImpl> m_Weapons = new List<WeaponImpl>(); 
 
-    WeaponImpl m_current;
+    public WeaponImpl m_current;
 
     public static Action OnPlayerDead;
 
@@ -21,7 +23,8 @@ public class DecisionMakingEntity : MovingEntity
     BehaviourTree m_BTree;
     string seekBehaviourKey = "SeekBehaviour";
     string agentPosKey = "AgentPos";
-    Pointer m_PosPointer;
+    string healthKey = "Health";
+    string entityKey = "Entity";
 
     protected override void Awake()
     {
@@ -33,17 +36,33 @@ public class DecisionMakingEntity : MovingEntity
         if (!m_Seek) Debug.LogError("Object doesn't have a Seek Steering Behaviour attached", this);
 
         m_BTree = new BehaviourTree(
-            new BTSequence(new List<BTNode>()
+            new BTSelector(new List<BTNode>()
+            {
+                new BTSequence(new List<BTNode>()
+                {
+                    new BTEnemiesNearby(m_AlertRadius),
+                    new BTClosestVisibleEnemy(),
+                    new BTKillClosestEnemy()
+
+                }),
+                new BTSequence(new List<BTNode>()
                 {
                     new BTHealthPickup(),
                     new BTSeekTo()
+                }),
+                new BTSequence(new List<BTNode>()
+                {
+                    new BTPatrolRandomly(),
+                    new BTSeekTo()
                 })
-            );
+            })
+        );
 
 
-        m_BTree.m_Blackboard.AddToDictionary(seekBehaviourKey, new Pointer(m_Seek));
-        m_PosPointer = new Pointer((Vector2)transform.position);
-        m_BTree.m_Blackboard.AddToDictionary(agentPosKey, m_PosPointer);
+        m_BTree.m_Blackboard.AddToDictionary(seekBehaviourKey, m_Seek);
+        m_BTree.m_Blackboard.AddToDictionary(agentPosKey, (Vector2)transform.position);
+        m_BTree.m_Blackboard.AddToDictionary(healthKey, GetComponent<Health>());
+        m_BTree.m_Blackboard.AddToDictionary(entityKey, this);
     }
 
     private void Start()
@@ -54,7 +73,7 @@ public class DecisionMakingEntity : MovingEntity
 
     void Update()
     {
-        m_PosPointer.Var = (Vector2)transform.position;
+        m_BTree.m_Blackboard.AddToDictionary(agentPosKey, (Vector2)transform.position);
         m_BTree.Process();
     }
 
@@ -83,20 +102,4 @@ public class DecisionMakingEntity : MovingEntity
         OnPlayerDead?.Invoke();
 		base.DestroyEntity();
 	}
-
-    SimpleEnemy CheckForEnemies()
-    {
-        Collider2D[] entities = Physics2D.OverlapCircleAll(transform.position, 5.0f);
-
-        if (entities.Length == 0) return null;
-
-        for(int i = 0; i < entities.Length; ++i)
-        {
-            SimpleEnemy simpleEnemy = entities[i].GetComponent<SimpleEnemy>();
-
-            if (simpleEnemy) return simpleEnemy;
-        }
-
-        return null;
-    }
 }

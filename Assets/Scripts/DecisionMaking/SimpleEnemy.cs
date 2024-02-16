@@ -13,7 +13,8 @@ public class SimpleEnemy : MovingEntity
     SteeringBehaviour_Seek seek;
     SteeringBehaviour_Manager manageer;
 
-    public static Action OnEnemyDeath;
+    public static Action<SimpleEnemy> OnEnemyDeath;
+    public static Action<SimpleEnemy> OnEnemySpawn;
 
     bool stall = false;
     float stallTime = 2.0f;
@@ -31,6 +32,7 @@ public class SimpleEnemy : MovingEntity
         GetComponent<ApplyDamage>().OnDamageDealt += Stall;
         DecisionMakingEntity.OnPlayerDead += DestroyEntity;
 
+        OnEnemySpawn.Invoke(this);
 	}
 
 	private void Update()
@@ -64,7 +66,7 @@ public class SimpleEnemy : MovingEntity
 
     public override void DestroyEntity()
     {
-        OnEnemyDeath.Invoke();
+        OnEnemyDeath.Invoke(this);
 
 		DecisionMakingEntity.OnPlayerDead -= DestroyEntity;
 

@@ -38,7 +38,7 @@ public abstract class MovingEntity : Entity
             {
                 //assume up is facing direction
                 float angle = Mathf.Atan2(m_Rigidbody.velocity.y, m_Rigidbody.velocity.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, angle - 90);
+                transform.rotation = Quaternion.Euler(0, 0, 90 + angle);
             }
             else if (m_FlipsBasedOnVelocity)
             {

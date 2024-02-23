@@ -6,6 +6,7 @@ public class BTEnemiesNearby : BTNode
 {
     string agentPosKey = "AgentPos";
     string nearEnemiesKey = "NearbyEnemies";
+    string evadeBehaviourKey = "EvadeBehaviour";
 
     float m_AlertDistance;
     List<SimpleEnemy> m_EnemyList;
@@ -41,6 +42,8 @@ public class BTEnemiesNearby : BTNode
         }
         else
         {
+            SteeringBehaviour_Evade evade = (SteeringBehaviour_Evade)m_Blackboard.GetFromDictionary(evadeBehaviourKey);
+            evade.m_Active = false;
             return BTState.FAILURE;
         }
     }

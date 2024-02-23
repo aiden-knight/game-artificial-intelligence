@@ -9,35 +9,36 @@ public class BTPatrolRandomly : BTNode
     string cancelSeekKey = "CancelSeek";
     string agentPosKey = "AgentPos";
 
-    Pathfinding_JPS m_JPS;
+    Pathfinding_AStar m_AStar;
 
     public BTPatrolRandomly() : base()
     {
-        m_JPS = new Pathfinding_JPS(true, false);
+        m_AStar = new Pathfinding_AStar(true, false);
     }
 
     public override BTState Process()
     {
         Vector2 agentPos = (Vector2)m_Blackboard.GetFromDictionary(agentPosKey);
-        if (m_JPS.m_Path.Count == 0)
+        if (m_AStar.m_Path.Count == 0)
         {
             Rect size = Grid.m_GridSize;
             float x1 = Random.Range(size.xMin, size.xMax);
             float y1 = Random.Range(size.yMin, size.yMax);
 
-            m_JPS.GeneratePath(Grid.GetNodeClosestWalkableToLocation(agentPos), Grid.GetNodeClosestWalkableToLocation(new Vector2(x1, y1)));
+            m_AStar.GeneratePath(Grid.GetNodeClosestWalkableToLocation(agentPos), Grid.GetNodeClosestWalkableToLocation(new Vector2(x1, y1)));
             return BTState.PROCESSING;
         }
         else
         {
-            if (m_JPS.m_Path.Count > 0)
+            if (m_AStar.m_Path.Count > 0)
             {
-                Vector2 closestPoint = m_JPS.GetNextPointOnPath(agentPos);
+                Vector2 closestPoint = m_AStar.GetNextPointOnPath(agentPos);
 
-                RaycastHit2D hit = Physics2D.Raycast(agentPos, closestPoint - agentPos, Maths.Magnitude(closestPoint - agentPos));
-                if(hit.collider != null)
+                float dist = Maths.Magnitude(closestPoint - agentPos);
+                RaycastHit2D hit = Physics2D.Raycast(agentPos, closestPoint - agentPos, dist);
+                if (hit.collider != null || dist > 2.0f)
                 {
-                    m_JPS.m_Path.Clear();
+                    m_AStar.m_Path.Clear();
                     return BTState.PROCESSING;
                 }
 

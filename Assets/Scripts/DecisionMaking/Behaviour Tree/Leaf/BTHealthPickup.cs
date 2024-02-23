@@ -9,10 +9,12 @@ public class BTHealthPickup : BTNode
     string cancelSeekKey = "CancelSeek";
     string agentPosKey = "AgentPos";
     string healthKey = "Health";
+    string weaponsKey = "WeaponList";
 
-    Pathfinding_JPS m_JPS;
+    Pathfinding_AStar m_AStar;
 
     bool m_PickupExists = false;
+    bool m_AmmoPickup = false;
     Vector2 m_PickupLocation;
 
     public BTHealthPickup() : base()
@@ -21,24 +23,25 @@ public class BTHealthPickup : BTNode
         Pickup.PickUpCollected += ReceiveOnPickUpCollected;
 
         DecisionMakingEntity.OnPlayerDead += ReceiveOnPlayerDeath;
-        m_JPS = new Pathfinding_JPS(true, false);
+        m_AStar = new Pathfinding_AStar(true, false);
     }
 
     public override BTState Process()
     {
         Health health = (Health)m_Blackboard.GetFromDictionary(healthKey);
 
-        if(health.HealthRatio < 1.0f && m_PickupExists)
+        if((m_AmmoPickup || health.HealthRatio < 1.0f) && m_PickupExists)
         {
             Vector2 agentPos = (Vector2)m_Blackboard.GetFromDictionary(agentPosKey);
-            if (m_JPS.m_Path.Count > 0)
+            if (m_AStar.m_Path.Count > 0)
             {
-                Vector2 closestPoint = m_JPS.GetNextPointOnPath(agentPos);
+                Vector2 closestPoint = m_AStar.GetNextPointOnPath(agentPos);
 
-                RaycastHit2D hit = Physics2D.Raycast(agentPos, closestPoint - agentPos, Maths.Magnitude(closestPoint - agentPos));
-                if (hit.collider != null)
+                float dist = Maths.Magnitude(closestPoint - agentPos);
+                RaycastHit2D hit = Physics2D.Raycast(agentPos, closestPoint - agentPos, dist - 0.5f);
+                if (hit.collider != null || dist > 2.0f)
                 {
-                    m_JPS.m_Path.Clear();
+                    m_AStar.m_Path.Clear();
                     return BTState.PROCESSING;
                 }
 
@@ -47,7 +50,7 @@ public class BTHealthPickup : BTNode
             }
             else
             {
-                m_JPS.GeneratePath(Grid.GetNodeClosestWalkableToLocation(agentPos), Grid.GetNodeClosestWalkableToLocation(m_PickupLocation));
+                m_AStar.GeneratePath(Grid.GetNodeClosestWalkableToLocation(agentPos), Grid.GetNodeClosestWalkableToLocation(m_PickupLocation));
                 return BTState.PROCESSING;
             }
         }
@@ -62,13 +65,29 @@ public class BTHealthPickup : BTNode
     {
         m_PickupLocation = pHealth;
         m_Blackboard.AddToDictionary(cancelSeekKey, false);
+        m_AmmoPickup = false;
+
+        Health health = (Health)m_Blackboard.GetFromDictionary(healthKey);
+        if(health.HealthRatio > 0.5f)
+        {
+            List<WeaponImpl> weapons = (List<WeaponImpl>)m_Blackboard.GetFromDictionary(weaponsKey);
+            foreach (WeaponImpl weapon in weapons)
+            {
+                if (weapon.GetAmmoCount() == 0)
+                {
+                    m_PickupLocation = pAmmo;
+                    m_AmmoPickup = true;
+                    break;
+                }
+            }
+        }
 
         m_PickupExists = true;
     }
 
     void ReceiveOnPickUpCollected()
     {
-        m_JPS.m_Path.Clear();
+        m_AStar.m_Path.Clear();
         m_Blackboard.AddToDictionary(cancelSeekKey, true);
         m_PickupExists = false;
     }

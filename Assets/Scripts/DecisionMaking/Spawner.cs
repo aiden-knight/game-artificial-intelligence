@@ -54,7 +54,7 @@ public class Spawner : MonoBehaviour
     void DecrementAliveEnemyCount(SimpleEnemy enemy)
     { 
         aliveEnemyCount--;
-        if(aliveEnemyCount == 0 && waveEnemiesSpawned == waveMaxEnemies)
+        if(aliveEnemyCount == 0 && waveEnemiesSpawned >= waveMaxEnemies)
         {
             InitNextWave();
         }

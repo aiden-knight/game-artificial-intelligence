@@ -59,7 +59,7 @@ public class PickupManager : MonoBehaviour
         GameObject g1 = Instantiate(healthPickUpPrefab, selectedSpawn1.position, Quaternion.identity);
         GameObject g2 = Instantiate(ammoPickUpPrefab, selectedSpawn2.position, Quaternion.identity);
 
-        OnPickUpSpawned.Invoke(selectedSpawn1.position, selectedSpawn2.position);
+        OnPickUpSpawned?.Invoke(selectedSpawn1.position, selectedSpawn2.position);
 
         currentSpawnDelay = UnityEngine.Random.Range(minWaitTime, maxWaitTime);
         spawnAllowed = false;

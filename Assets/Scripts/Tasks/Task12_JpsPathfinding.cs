@@ -8,7 +8,7 @@ public class Task12_JpsPathfinding : MovingEntity
 	SteeringBehaviour_Seek m_Seek;
 
 	[SerializeField]
-	Pathfinding_JSP m_JPS;
+	Pathfinding_JPS m_JPS;
 
 	[Header("Debug")]
 	[Tooltip("Draws the path of the agent")]
@@ -29,7 +29,7 @@ public class Task12_JpsPathfinding : MovingEntity
 		if (!m_Seek)
 			Debug.LogError("Object doesn't have a Seek Steering Behaviour attached", this);
 
-		m_JPS = new Pathfinding_JSP(true, false);
+		m_JPS = new Pathfinding_JPS(true, false);
 	}
 
 	protected override Vector2 GenerateVelocity()

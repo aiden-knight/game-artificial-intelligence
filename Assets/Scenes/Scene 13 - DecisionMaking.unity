@@ -16751,7 +16751,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -141.59131, y: -93.46431}
+  m_AnchoredPosition: {x: -84, y: -28.6}
   m_SizeDelta: {x: 95.3902, y: 41.9286}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &657188371
@@ -16792,6 +16792,69 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 657188369}
   m_CullTransparentMesh: 1
+--- !u!1 &667837474 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+  m_PrefabInstance: {fileID: 789838360}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &667837476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667837474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71aa3d57e48c65a47a9bca32eb36e1ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_MaxForce: 100
+  m_RemainingForce: 0
+  m_SteeringBehaviours:
+  - {fileID: 667837477}
+  - {fileID: 667837484}
+--- !u!114 &667837477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667837474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d7dd8f3a5e8cfc4d92d2904d71f13e5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  m_Weight: 10
+  m_Debug_ShowDebugLines: 1
+  m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
+  m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
+  m_Debug_SteeringColour: {r: 1, g: 0, b: 0, a: 1}
+  m_TargetPosition: {x: 0, y: 0}
+  m_Debug_TargetColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+--- !u!114 &667837484
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667837474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db8540f8d08eb5d459b81b41612a1e9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Active: 0
+  m_Weight: 10
+  m_Debug_ShowDebugLines: 1
+  m_Debug_DesiredVelocityColour: {r: 0, g: 0, b: 1, a: 1}
+  m_Debug_CurrentVelocityColour: {r: 0, g: 1, b: 0, a: 1}
+  m_Debug_SteeringColour: {r: 1, g: 0, b: 0, a: 1}
+  m_EvadingEntity: {fileID: 0}
+  m_EvadeRadius: 3
+  m_Debug_RadiusColour: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
 --- !u!1 &676955720
 GameObject:
   m_ObjectHideFlags: 0
@@ -17951,6 +18014,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShootyBangBangPlayer
       objectReference: {fileID: 0}
+    - target: {fileID: 5472619170381930387, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5889254483578412018, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -18003,6 +18070,10 @@ PrefabInstance:
       propertyPath: m_RotatesBasedOnVelocity
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7384461628233111932, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8842847237804936930, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
       propertyPath: m_BodyType
       value: 0
@@ -18010,7 +18081,16 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 667837476}
+    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 667837477}
+    - targetCorrespondingSourceObject: {fileID: 3372759749605555842, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 667837484}
   m_SourcePrefab: {fileID: 100100000, guid: fc793f37b7818084ba0ef18ce315a829, type: 3}
 --- !u!1 &790057445
 GameObject:
@@ -59983,7 +60063,7 @@ MonoBehaviour:
   waveMaxEnemies: 10
   maxEnemiesAllowed: 50
   prefabToSpawn: {fileID: 5252626420364565232, guid: 22b100872bf3de24aa772a56be9be025, type: 3}
-  InitialSpawnDelay: 5
+  InitialSpawnDelay: 3
   spawnPoints:
   - {fileID: 1445194302}
   - {fileID: 550913961}
@@ -61014,9 +61094,9 @@ RectTransform:
   m_Father: {fileID: 449703904}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 170, y: -90}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -8, y: 14.02}
   m_SizeDelta: {x: 160, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1912415386
@@ -63790,6 +63870,8 @@ MonoBehaviour:
   m_RotatesBasedOnVelocity: 0
   m_FlipsBasedOnVelocity: 0
   m_AStar:
+    m_AllowDiagonal: 0
+    m_CanCutCorners: 0
     m_Debug_ChangeTileColours: 0
   m_Debug_DrawPath: 0
 --- !u!114 &970533613283422138
@@ -64036,6 +64118,8 @@ MonoBehaviour:
   m_RotatesBasedOnVelocity: 0
   m_FlipsBasedOnVelocity: 0
   m_AStar:
+    m_AllowDiagonal: 0
+    m_CanCutCorners: 0
     m_Debug_ChangeTileColours: 0
   m_Debug_DrawPath: 0
 --- !u!4 &2271500134948710840
@@ -64292,6 +64376,8 @@ MonoBehaviour:
   m_RotatesBasedOnVelocity: 0
   m_FlipsBasedOnVelocity: 0
   m_AStar:
+    m_AllowDiagonal: 0
+    m_CanCutCorners: 0
     m_Debug_ChangeTileColours: 0
   m_Debug_DrawPath: 0
 --- !u!114 &5758438632410580607

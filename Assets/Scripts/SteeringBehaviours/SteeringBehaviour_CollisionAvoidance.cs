@@ -29,8 +29,45 @@ public class SteeringBehaviour_CollisionAvoidance : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
-        //delete me
-        return Vector2.zero;
+        // update feelers position, length and rotation
+        UpdateFeelers();
+
+        // find nearest collision
+        float nearestDist = float.MaxValue;
+        Vector2 fleePos = Vector2.zero;
+        float feelerLength = 1.0f;
+        for(int i = 0; i < m_Feelers.Length; ++i)
+        {
+            RaycastHit2D hit = Physics2D.Raycast(transform.position, m_FeelerVectors[i], m_FeelersLength[i], m_FeelerLayerMask.value);
+
+            if (hit.collider == null) continue;
+            
+            Vector2 hitPos = hit.point;
+            float dist = Maths.Magnitude(hitPos - (Vector2)transform.position);
+
+            // if closer
+            if(dist < nearestDist)
+            { 
+                fleePos = hit.collider.transform.position;
+                feelerLength = m_FeelersLength[i];
+                nearestDist = dist;
+            }        
+        }
+
+        // if a feeler collided, flee from collision position
+        if(nearestDist < float.MaxValue)
+        {
+            Vector2 negativeDir = Maths.Normalise((Vector2)transform.position - fleePos);
+            m_DesiredVelocity = negativeDir * m_Manager.m_Entity.m_MaxSpeed;
+
+            float newWeight = Mathf.Lerp(m_Weight, 0, nearestDist / feelerLength);
+            return newWeight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
+        }
+        else
+        {
+            m_DesiredVelocity = Vector2.zero;
+            return Vector2.zero;
+        }
     }
 
     void UpdateFeelers()

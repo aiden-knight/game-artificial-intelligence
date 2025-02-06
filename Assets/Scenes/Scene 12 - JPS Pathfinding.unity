@@ -62402,7 +62402,7 @@ GameObject:
   - component: {fileID: 873809575178942948}
   - component: {fileID: 873809575178942939}
   - component: {fileID: 873809575178942938}
-  - component: {fileID: 873809575178942932}
+  - component: {fileID: 873809575178942949}
   - component: {fileID: 873809575178942936}
   - component: {fileID: 873809575178942943}
   - component: {fileID: 873809575178942942}
@@ -62442,28 +62442,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &873809575178942932
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 873809575178942930}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7fd8ef241be1a1a46813381b8908846b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_AttackPower: 2
-  m_MaxSpeed: 5
-  m_RotatesBasedOnVelocity: 0
-  m_FlipsBasedOnVelocity: 0
-  m_AStar:
-    m_AllowDiagonal: 0
-    m_CanCutCorners: 0
-    m_MaxPathCount: 10000
-    m_Debug_ChangeTileColours: 1
-  m_Debug_DrawPath: 1
 --- !u!114 &873809575178942936
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62648,10 +62626,31 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 873809575178942930}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.56, y: -1.33, z: 0}
+  m_LocalPosition: {x: -6.34, y: 0.68, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &873809575178942949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 873809575178942930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f35704af26a74e346a43140fac4a0cb8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AttackPower: 2
+  m_MaxSpeed: 5
+  m_RotatesBasedOnVelocity: 1
+  m_FlipsBasedOnVelocity: 0
+  m_JPS:
+    m_AllowDiagonal: 0
+    m_CanCutCorners: 0
+    m_Debug_ChangeTileColours: 1
+  m_Debug_DrawPath: 1

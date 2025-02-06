@@ -15,5 +15,5 @@ MonoBehaviour:
   bulletPrefab: {fileID: 28831845028521996, guid: d259b0aa736837744b6f28aeacbf54e9, type: 3}
   firerate: 1.5
   type: 2
-  startingAmmoCount: 10
+  startingAmmoCount: 50
   shotSpeed: 4

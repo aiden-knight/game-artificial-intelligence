@@ -27,7 +27,7 @@ public class PlayerUI : MonoBehaviour
         healthBar.value = (float)curr / (float)max;
     }
 
-    void ScoreIncrement()
+    void ScoreIncrement(SimpleEnemy enemy)
     {
         score += 100;
         scoreText.text = score.ToString();

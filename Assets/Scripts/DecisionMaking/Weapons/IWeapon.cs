@@ -12,7 +12,7 @@ public class WeaponImpl : MonoBehaviour
     IMuzzle weaponMuzzle;
     int ammo;
 
-    private void Start()
+    private void Awake()
     {
         ammo = data.startingAmmoCount;
         weaponMuzzle = gameObject.GetComponentInChildren<IMuzzle>();

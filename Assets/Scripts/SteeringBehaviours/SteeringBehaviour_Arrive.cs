@@ -20,8 +20,20 @@ public class SteeringBehaviour_Arrive : SteeringBehaviour
 
     public override Vector2 CalculateForce()
     {
-        //delete me
-        return Vector2.zero;
+        Vector2 toTarget = m_TargetPosition - (Vector2)(transform.position);
+        float magnitude = Maths.Magnitude(toTarget);
+
+        if(magnitude < m_SlowingRadius )
+        {
+            float deceleration = magnitude / m_SlowingRadius;
+            m_DesiredVelocity = deceleration * m_Manager.m_Entity.m_MaxSpeed * Maths.Normalise(toTarget);
+        }
+        else
+        {
+            m_DesiredVelocity = Maths.Normalise(toTarget) * m_Manager.m_Entity.m_MaxSpeed;
+        }
+
+        return m_Weight * (m_DesiredVelocity - m_Manager.m_Entity.m_Velocity);
     }
 
     protected override void OnDrawGizmosSelected()

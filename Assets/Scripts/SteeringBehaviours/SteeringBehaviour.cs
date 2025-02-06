@@ -27,6 +27,11 @@ public abstract class SteeringBehaviour : MonoBehaviour
     protected Vector2 m_DesiredVelocity;
     protected Vector2 m_Steering;
 
+    public void ShowDebug(bool debug)
+    {
+        m_Debug_ShowDebugLines = debug;
+    }
+
     private void Awake()
     {
         m_Manager = GetComponent<SteeringBehaviour_Manager>();

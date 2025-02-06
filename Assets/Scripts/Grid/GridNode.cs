@@ -94,6 +94,11 @@ public class GridNode : MonoBehaviour
         m_SpriteRenderer.color = m_ClosedInPathFindingColour;
     }
 
+    public void SetJumpedInPathFinding()
+    {
+        m_SpriteRenderer.color = Color.grey;
+    }
+
     public void SetOpenInPathFinding()
     {
         m_SpriteRenderer.color = m_OpenInPathFindingColour;

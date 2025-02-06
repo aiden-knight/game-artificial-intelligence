@@ -13,11 +13,14 @@ public class SimpleEnemy : MovingEntity
     SteeringBehaviour_Seek seek;
     SteeringBehaviour_Manager manageer;
 
-    public static Action OnEnemyDeath;
+    public static Action<SimpleEnemy> OnEnemyDeath;
+    public static Action<SimpleEnemy> OnEnemySpawn;
 
     bool stall = false;
     float stallTime = 2.0f;
     float timeStallStart = 0;
+
+    Pathfinding_JPS m_JPS;
 
     public void InitTarget(Transform target)
     {
@@ -31,6 +34,9 @@ public class SimpleEnemy : MovingEntity
         GetComponent<ApplyDamage>().OnDamageDealt += Stall;
         DecisionMakingEntity.OnPlayerDead += DestroyEntity;
 
+        m_JPS = new Pathfinding_JPS(true, false);
+
+        OnEnemySpawn.Invoke(this);
 	}
 
 	private void Update()
@@ -39,7 +45,34 @@ public class SimpleEnemy : MovingEntity
         {
             Resume();
         }
-        seek.m_TargetPosition = transformOfInterest.position;
+
+        Vector2 toTarget = transformOfInterest.position - transform.position;
+        float dist = Maths.Magnitude(toTarget);
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, toTarget, dist + 1.0f);
+        if (hit.collider.gameObject != transformOfInterest.gameObject)
+        {
+            if (m_JPS.m_Path.Count == 0)
+            {
+                m_JPS.GeneratePath(Grid.GetNodeClosestWalkableToLocation(transform.position), Grid.GetNodeClosestWalkableToLocation(transformOfInterest.position));
+            }
+            else
+            {
+                if (m_JPS.m_Path.Count > 0)
+                {
+                    Vector2 closestPoint = m_JPS.GetClosestPointOnPath(transform.position);
+
+                    if (Maths.Magnitude(closestPoint - (Vector2)transform.position) < 0.5f)
+                        closestPoint = m_JPS.GetNextPointOnPath(transform.position);
+
+                    seek.m_TargetPosition = closestPoint;
+                }
+            }
+        }
+        else
+        {
+            m_JPS.m_Path.Clear();
+            seek.m_TargetPosition = transformOfInterest.position;
+        }
     }
     
     protected override Vector2 GenerateVelocity()
@@ -64,7 +97,7 @@ public class SimpleEnemy : MovingEntity
 
     public override void DestroyEntity()
     {
-        OnEnemyDeath.Invoke();
+        OnEnemyDeath.Invoke(this);
 
 		DecisionMakingEntity.OnPlayerDead -= DestroyEntity;
 
